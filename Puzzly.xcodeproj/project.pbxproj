@@ -44,12 +44,6 @@
 		591C96F1207928680023FA29 /* ImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		591DFBB920D051310096372A /* Array.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.swift; sourceTree = "<group>"; };
 		591DFBBB20D0516A0096372A /* Int.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Int.swift; sourceTree = "<group>"; };
-		5948388820F24538007A3644 /* Portrait3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Portrait3.png; sourceTree = "<group>"; };
-		5948388920F24538007A3644 /* Portrait2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Portrait2.png; sourceTree = "<group>"; };
-		5948388A20F24538007A3644 /* Portrait1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Portrait1.png; sourceTree = "<group>"; };
-		5948388B20F2458C007A3644 /* Landscape2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Landscape2.png; sourceTree = "<group>"; };
-		5948388C20F2458C007A3644 /* Landscape1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Landscape1.png; sourceTree = "<group>"; };
-		5948388D20F2458C007A3644 /* Landscape3.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Landscape3.png; sourceTree = "<group>"; };
 		594AC07A20600D0A00091A72 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
 		594E56ED20606C0C00E4C63D /* timeburnernormal.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = timeburnernormal.ttf; sourceTree = "<group>"; };
 		594E56EE20606C0C00E4C63D /* timeburnerbold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = timeburnerbold.ttf; sourceTree = "<group>"; };
@@ -58,8 +52,6 @@
 		5951B2B8206BE73F0067BBE2 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		5951B2BA206C41C70067BBE2 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		59609BF5225650D300E83FD5 /* ContainerGridModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerGridModel.swift; sourceTree = "<group>"; };
-		5974947120F2C93A0078EBE3 /* Portrait4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Portrait4.png; sourceTree = "<group>"; };
-		5974947220F2C93A0078EBE3 /* Landscape4.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Landscape4.png; sourceTree = "<group>"; };
 		597FC59220E5778100269861 /* PlayViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayViewController.swift; sourceTree = "<group>"; };
 		5983444A20A43C56005054F9 /* PuzzleGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PuzzleGridView.swift; sourceTree = "<group>"; };
 		598A0B8120CA807400F9A375 /* HintView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintView.swift; sourceTree = "<group>"; };
@@ -108,21 +100,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		5948388720F244CB007A3644 /* Images */ = {
-			isa = PBXGroup;
-			children = (
-				5948388A20F24538007A3644 /* Portrait1.png */,
-				5948388920F24538007A3644 /* Portrait2.png */,
-				5948388820F24538007A3644 /* Portrait3.png */,
-				5974947120F2C93A0078EBE3 /* Portrait4.png */,
-				5948388C20F2458C007A3644 /* Landscape1.png */,
-				5948388B20F2458C007A3644 /* Landscape2.png */,
-				5948388D20F2458C007A3644 /* Landscape3.png */,
-				5974947220F2C93A0078EBE3 /* Landscape4.png */,
-			);
-			path = Images;
-			sourceTree = "<group>";
-		};
 		5951B2B5206BDE890067BBE2 /* Custom */ = {
 			isa = PBXGroup;
 			children = (
@@ -155,7 +132,6 @@
 				59BD7010205DB1E00061E82C /* Puzzly */,
 				59BD700F205DB1E00061E82C /* Products */,
 				590D991720F11BCC00399256 /* README.md */,
-				5948388720F244CB007A3644 /* Images */,
 				167D2423C65AFBE979A2E3C9 /* Pods */,
 				3B87AF7D5226DABF3295B9EC /* Frameworks */,
 			);
