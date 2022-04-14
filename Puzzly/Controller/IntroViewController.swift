@@ -10,6 +10,8 @@ import UIKit
 import AVFoundation
 import Photos
 import SnapKit
+import XHYCategories
+
 class IntroViewController: UIViewController {
 
     private var titleLabel = UILabel(text: "Puzzly", font: UIFont(name: "Didot", size: 80) ?? .systemFont(ofSize: 80, weight: .regular), color: .black, alignment: .center)

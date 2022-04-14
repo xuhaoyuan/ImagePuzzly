@@ -1,11 +1,3 @@
-//
-//  EditViewController.swift
-//  Gridy
-//
-//  Created by Spencer Forrest on 28/03/2018.
-//  Copyright © 2018 Spencer Forrest. All rights reserved.
-//
-
 import UIKit
 
 class EditViewController: UIViewController {
@@ -20,7 +12,7 @@ class EditViewController: UIViewController {
         from.present(navi, animated: true, completion: nil)
     }
 
-    private let rightItem: UIBarButtonItem = {
+    private lazy var rightItem: UIBarButtonItem = {
         var icon = UIBarButtonItem.SystemItem.cancel
         if #available(iOS 13.0, *) {
             icon = UIBarButtonItem.SystemItem.close
@@ -33,16 +25,14 @@ class EditViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 
     override func viewDidLoad() {
+        title = "Clip"
         view.backgroundColor = UIColor.white
         navigationItem.rightBarButtonItem = rightItem
-        editView = EditView.init(image: image)
+        editView = EditView(image: image)
         editView.delegate = self
-        editView.setup(parentView: self.view)
+        editView.setup(parentView: view)
     }
 
     // Update Layout for iPad if needed
@@ -51,9 +41,14 @@ class EditViewController: UIViewController {
         editView.updateLayout()
     }
 
-    @objc internal func quitButtonTouched() {
+    @objc private func quitButtonTouched() {
         self.dismiss(animated: true, completion: nil)
     }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
 }
 
 extension EditViewController: EditViewDelegate {
@@ -62,6 +57,7 @@ extension EditViewController: EditViewDelegate {
         let playViewController = PlayViewController()
         playViewController.imagesWithInitialPosition = self.getSnapshots()
         playViewController.hintImage = self.getHintImage()
+        playViewController.modalPresentationStyle = .fullScreen
         self.present(playViewController, animated: true)
     }
 
