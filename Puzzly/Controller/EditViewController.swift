@@ -54,9 +54,8 @@ class EditViewController: UIViewController {
 extension EditViewController: EditViewDelegate {
 
     func startButtonTouched() {
-        let playViewController = PlayViewController()
-        playViewController.imagesWithInitialPosition = self.getSnapshots()
-        playViewController.hintImage = self.getHintImage()
+        guard let (clipImages, hintImage) = getSnapshots() else { return }
+        let playViewController = PlayViewController(originImage: image, hintImage: hintImage, clipImages: clipImages)
         playViewController.modalPresentationStyle = .fullScreen
         self.present(playViewController, animated: true)
     }
@@ -91,17 +90,17 @@ extension EditViewController: EditViewDelegate {
     /// Get images of all the squares
     ///
     /// - Returns: array of snapshots
-    private func getSnapshots() -> [Image] {
-        guard let imagesBound = editView.imagesBound  else { return [Image]() }
-        var images = [Image]()
-        wholeImage = snapshotWholeScreen()
+    private func getSnapshots() -> ([UIImage], UIImage)? {
+        guard let imagesBound = editView.imagesBound  else { return nil }
+        var images: [UIImage] = []
+        let wholeImage = snapshotWholeScreen()
         let max = imagesBound.count - 1
         for index in 0...max {
             let bound = imagesBound[index]
-            let image = cropImage(image: wholeImage!, rectangle: bound, id: index)
+            let image = cropImage(image: wholeImage, rectangle: bound, id: index)
             images.append(image)
         }
-        return images
+        return (images, wholeImage)
     }
 
     /// Take a snapshot of the whole screen
@@ -125,9 +124,8 @@ extension EditViewController: EditViewDelegate {
     ///   - rectangle: Frame to crop
     ///   - id: Initial position
     /// - Returns: Image with id
-    private func cropImage(image: UIImage, rectangle: CGRect, id: Int) -> Image {
-        let uiimage = cropImage(image: image, rectangle: rectangle)
-        return Image(image: uiimage, id: id)
+    private func cropImage(image: UIImage, rectangle: CGRect, id: Int) -> UIImage {
+        return cropImage(image: image, rectangle: rectangle)
     }
 
     /// Create a cropped UIImage

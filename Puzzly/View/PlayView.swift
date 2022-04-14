@@ -24,15 +24,6 @@ class PlayView: UIView {
 
     var shareButton: UIButton?
 
-    let instructionLabel: UILabel = {
-        let label = UILabel()
-        label.font = UIFont(name: Constant.Font.Name.helveticaNeue, size: 15)
-        label.text = Constant.String.instruction
-        label.textAlignment = .center
-        label.numberOfLines = 2
-        return label
-    }()
-
     var puzzlePieceViews = [UIImageView]()
     var puzzlePieceViewConstraints = [Int: [NSLayoutConstraint]]()
 
@@ -90,7 +81,6 @@ class PlayView: UIView {
 
     func layoutEndGameMode() {
         removeUserInteraction(from: puzzlePieceViews)
-        instructionLabel.isHidden = true
         addSharePuzzleButton()
     }
 
@@ -102,33 +92,26 @@ class PlayView: UIView {
 
     private func addSubviews() {
         self.translatesAutoresizingMaskIntoConstraints = false
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = UIColor.clear
 
         headerView.backgroundColor = UIColor.brown
 
         addSubview(centeringView)
         addSubview(puzzleGridView)
         addSubview(headerView)
-        addSubview(instructionLabel)
         addSubview(hintView)
 
         puzzleGridView.snp.makeConstraints { make in
-            make.width.equalTo(snp.height).multipliedBy(0.5)
+            make.width.equalToSuperview()
             make.center.equalToSuperview()
             make.height.equalTo(puzzleGridView.snp.width)
         }
 
         headerView.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(16)
+            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(16)
             make.leading.equalTo(puzzleGridView)
             make.trailing.equalTo(puzzleGridView)
             make.height.equalTo(60)
-        }
-
-        instructionLabel.snp.makeConstraints { make in
-            make.leading.equalTo(puzzleGridView.snp.leading)
-            make.trailing.equalTo(puzzleGridView.snp.trailing)
-            make.bottom.equalTo(puzzleGridView.snp.top)
         }
 
         setAndActivateCenteringView()
