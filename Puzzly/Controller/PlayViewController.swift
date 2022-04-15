@@ -11,11 +11,12 @@ import UIKit
 class PlayViewController: UIViewController {
 
     private lazy var playView: PlayView = {
-        let view = PlayView(hintImage: hintImage, puzzlePieceViews: makeRandomOrderImageViews())
+        let view = PlayView(puzzlePieceViews: makeRandomOrderImageViews())
         view.delegate = self
         view.headerView.delegate = self
         return view
     }()
+    private lazy var hintView: HintView = HintView(image: hintImage)
     private let clipImages: [UIImage]
     private let hintImage: UIImage
     private let originImage: UIImage
@@ -41,6 +42,10 @@ class PlayViewController: UIViewController {
 
         view.backgroundColor = UIColor.white
         backgroundImage.contentMode = .scaleAspectFill
+        view.addSubview(hintView)
+        hintView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         view.addSubview(backgroundImage)
         view.addSubview(blurView)
         blurView.contentView.addSubview(playView)
@@ -132,7 +137,7 @@ extension PlayViewController: PlayViewDelegate {
 
     private func updateScore() {
         score += 1
-        playView.headerView.scoreLabel.text = "\(score)"
+        playView.headerView.movesLabel.text = "\(score)"
     }
 
     private func presentWinningAlert() {
@@ -149,5 +154,9 @@ extension PlayViewController: HeaderViewDelegate {
 
     func newGameButtonTapped() {
         self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+
+    func preview() {
+        hintView.appearsTemporarily(for: 2)
     }
 }

@@ -20,21 +20,18 @@ class PlayView: UIView {
     lazy var puzzleGridView = PuzzleGridView(images: puzzlePieceViews)
 
     var headerView = HeaderView()
-    var centeringView = UIView()
 
     var shareButton: UIButton?
 
     var puzzlePieceViews = [UIImageView]()
     var puzzlePieceViewConstraints = [Int: [NSLayoutConstraint]]()
 
-    var hintView: HintView!
 
     required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 
-    init(hintImage: UIImage, puzzlePieceViews: [UIImageView]) {
+    init(puzzlePieceViews: [UIImageView]) {
         self.puzzlePieceViews = puzzlePieceViews
         super.init(frame: .zero)
-        hintView = HintView(image: hintImage)
         addSubviews()
         setupGestureRecognizers()
 
@@ -79,27 +76,14 @@ class PlayView: UIView {
         return CGPoint(x: centerX, y: centerY)
     }
 
-    func layoutEndGameMode() {
-        removeUserInteraction(from: puzzlePieceViews)
-        addSharePuzzleButton()
-    }
-
-    private func removeUserInteraction(from views: [UIView]) {
-        for view in views {
-            view.isUserInteractionEnabled = false
-        }
-    }
-
     private func addSubviews() {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = UIColor.clear
 
-        headerView.backgroundColor = UIColor.brown
+        headerView.backgroundColor = UIColor.clear
 
-        addSubview(centeringView)
         addSubview(puzzleGridView)
         addSubview(headerView)
-        addSubview(hintView)
 
         puzzleGridView.snp.makeConstraints { make in
             make.width.equalToSuperview()
@@ -114,48 +98,13 @@ class PlayView: UIView {
             make.height.equalTo(60)
         }
 
-        setAndActivateCenteringView()
-        setAndActivateHintViewConstraints()
     }
 
     private func setupGestureRecognizers() {
         setupPuzzlePiecesGestureRecognizers()
     }
-
-    private func initialLayout(for puzzlePieceViews: [UIImageView]) {
-
-    }
 }
 
-// MARK: - Layout constraints (Universal)
-extension PlayView {
-    private func setAndActivateHintViewConstraints() {
-        NSLayoutConstraint.setAndActivate([
-            hintView.topAnchor.constraint(equalTo: self.topAnchor, constant: -1),
-            hintView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 1),
-            hintView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: -1),
-            hintView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 1)
-        ])
-    }
-
-    private func setAndActivateCenteringView() {
-        NSLayoutConstraint.setAndActivate([
-            centeringView.leftAnchor.constraint(equalTo: self.leftAnchor),
-            centeringView.rightAnchor.constraint(equalTo: self.rightAnchor),
-            centeringView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
-            centeringView.topAnchor.constraint(equalTo: headerView.bottomAnchor)
-        ])
-    }
-}
-
-
-// MARK: - ContainerGridView delegate
-extension PlayView: ContainerGridViewDelegate {
-    func eyeViewTapped() {
-        bringSubviewToFront(hintView)
-        hintView.appearsTemporarily(for: 2)
-    }
-}
 
 // MARK: - PuzzlePieces gesture recognizer logic
 extension PlayView {
@@ -168,37 +117,5 @@ extension PlayView {
 
     @objc private func movePuzzlePieceView(_ gestureRecognizer: UIPanGestureRecognizer) {
         delegate?.handlePuzzleViewDrag(gestureRecognizer)
-    }
-}
-
-// MARK: - ShareButton creation
-extension PlayView {
-    private func addSharePuzzleButton() {
-        shareButton = UIButton(type: .custom)
-        shareButton?.layer.cornerRadius = 5
-        shareButton?.clipsToBounds = true
-        shareButton?.backgroundColor = UIColor.main
-        shareButton?.setTitleColor(.white, for: .normal)
-        shareButton?.setTitle(Constant.String.shareButtonTitle, for: .normal)
-        shareButton?.addTarget(self, action: #selector(shareButtonTapped), for: .touchUpInside)
-
-        let centeringView = UIView()
-
-        addSubview(centeringView)
-        addSubview(shareButton!)
-
-        bringPuzzleToFront()
-
-    }
-
-    @objc private func shareButtonTapped() {
-        delegate?.handleShareButtonTapped()
-    }
-
-    private func bringPuzzleToFront() {
-        bringSubviewToFront(puzzleGridView)
-        for piece in puzzlePieceViews {
-            bringSubviewToFront(piece)
-        }
     }
 }

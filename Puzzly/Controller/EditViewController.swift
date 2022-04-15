@@ -54,10 +54,12 @@ class EditViewController: UIViewController {
 extension EditViewController: EditViewDelegate {
 
     func startButtonTouched() {
-        guard let (clipImages, hintImage) = getSnapshots() else { return }
-        let playViewController = PlayViewController(originImage: image, hintImage: hintImage, clipImages: clipImages)
-        playViewController.modalPresentationStyle = .fullScreen
-        self.present(playViewController, animated: true)
+        getSnapshots { [weak self] result in
+            guard let self = self, let result = result else { return }
+            let playViewController = PlayViewController(originImage: self.image, hintImage: result.1, clipImages: result.0)
+            playViewController.modalPresentationStyle = .fullScreen
+            self.present(playViewController, animated: true)
+        }
     }
 
     private func getHintImage() -> UIImage {
@@ -87,20 +89,30 @@ extension EditViewController: EditViewDelegate {
         return bound
     }
 
-    /// Get images of all the squares
-    ///
-    /// - Returns: array of snapshots
-    private func getSnapshots() -> ([UIImage], UIImage)? {
-        guard let imagesBound = editView.imagesBound  else { return nil }
-        var images: [UIImage] = []
-        let wholeImage = snapshotWholeScreen()
-        let max = imagesBound.count - 1
-        for index in 0...max {
-            let bound = imagesBound[index]
-            let image = cropImage(image: wholeImage, rectangle: bound, id: index)
-            images.append(image)
+
+    private func getSnapshots(finish: @escaping (([UIImage], UIImage)?) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let snapshotRect: CGRect = self.editView.imagesBound.reduce(CGRect.zero) { partialResult, rect in
+                let x: CGFloat = partialResult.minX == 0 ?  rect.minX : min(partialResult.minX, rect.minX)
+                let y: CGFloat = partialResult.minY == 0 ? rect.minY : min(partialResult.minY, rect.minY)
+                let width = max(partialResult.maxX, rect.maxX)
+                let height = max(partialResult.maxY, rect.maxY)
+               return CGRect(x: x, y: y, width: width - x, height: height-y)
+            }
+
+            var images: [UIImage] = []
+            let wholeImage = self.snapshotWholeScreen()
+
+            for (index, item) in self.editView.imagesBound.enumerated() {
+                let image = self.cropImage(image: wholeImage, rectangle: item, id: index)
+                images.append(image)
+            }
+            let hintImage = self.cropImage(image: wholeImage, rectangle: snapshotRect)
+            DispatchQueue.main.async {
+                finish((images, hintImage))
+            }
         }
-        return (images, wholeImage)
     }
 
     /// Take a snapshot of the whole screen
@@ -108,7 +120,6 @@ extension EditViewController: EditViewDelegate {
     /// - Returns: UIImage of the main view
     private func snapshotWholeScreen() -> UIImage {
         let bounds = self.editView.bounds
-
         UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
         self.editView.drawHierarchy(in: bounds, afterScreenUpdates: true)
         let snapshot = UIGraphicsGetImageFromCurrentImageContext()!

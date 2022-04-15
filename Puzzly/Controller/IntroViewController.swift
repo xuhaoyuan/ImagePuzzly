@@ -173,6 +173,8 @@ extension IntroViewController {
             self.presentImagePicker(sourceType: sourceType)
         case .denied, .restricted:
             self.openSettingsWithUIAlert(title: noPermissionTitle, message: noPermissionMessage)
+        case .limited:
+            self.presentImagePicker(sourceType: sourceType)
         @unknown default:
             fatalError()
         }
@@ -204,6 +206,7 @@ extension IntroViewController {
         let imagePickerController = UIImagePickerController()
         imagePickerController.delegate = self
         imagePickerController.sourceType = sourceType
+        imagePickerController.modalPresentationStyle = .fullScreen
         present(imagePickerController, animated: true, completion: nil)
     }
 
@@ -244,19 +247,16 @@ extension IntroViewController {
 extension IntroViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     // Delegate Function: UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        // Local variable inserted by Swift 4.2 migrator.
-        let info = convertFromUIImagePickerControllerInfoKeyDictionary(info)
 
         picker.dismiss(animated: true, completion: nil)
 
         var image: UIImage?
 
         if picker.allowsEditing {
-            image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.editedImage)] as? UIImage
+            image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
         } else {
-            image = info[convertFromUIImagePickerControllerInfoKey(UIImagePickerController.InfoKey.originalImage)] as? UIImage
+            image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         }
-
         if let image = image {
             EditViewController.show(from: self, image: image)
         }

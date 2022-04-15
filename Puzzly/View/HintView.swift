@@ -8,48 +8,37 @@
 
 import UIKit
 
-class HintView: UIView {
-  
-  var imageView: UIImageView!
-  
-  required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-  
-  init(image: UIImage) {
-    super.init(frame: .zero)
-    
-    self.imageView = UIImageView(image: image)
-    imageView.translatesAutoresizingMaskIntoConstraints = false
-    self.addSubview(imageView)
-    imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
-    imageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-    
-    self.imageView.alpha = 0
-    self.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-    self.isUserInteractionEnabled = false
-  }
-  
-  func appearsTemporarily(for delay: TimeInterval) {
-    self.isUserInteractionEnabled = true
-    let fadingInAnimation = {
-      self.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-      self.imageView.alpha = 1.0
-    }
-    
-    UIView.animate(withDuration: 0.7, animations: fadingInAnimation) {
-      (done) in
-      if done {
-        let fadingOutAnimation = {
-          self.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0)
-          self.imageView.alpha = 0.0
+class HintView: UIVisualEffectView {
+
+    required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    init(image: UIImage) {
+        super.init(effect: UIBlurEffect(style: .regular))
+
+        let imageView: UIImageView = UIImageView(image: image)
+        contentView.addSubview(imageView)
+        imageView.snp.makeConstraints { make in
+            make.center.equalToSuperview()
+            make.width.equalToSuperview()
+            make.height.equalTo(imageView.snp.width)
         }
-        
-        UIView.animate(withDuration: 0.7, delay: delay, options: [], animations: fadingOutAnimation) {
-          (completed) in
-          if completed {
-            self.isUserInteractionEnabled = false
-          }
-        }
-      }
+        isUserInteractionEnabled = false
+        alpha = 0
     }
-  }
+
+    func appearsTemporarily(for delay: TimeInterval) {
+        guard let superView = self.superview else { return }
+        superView.bringSubviewToFront(self)
+        self.isUserInteractionEnabled = true
+
+        UIView.animate(withDuration: 0.3, animations: { [weak self] in
+            self?.alpha = 1
+        })
+        UIView.animate(withDuration: 0.3, delay: delay, options: .curveEaseOut) { [weak self] in
+            self?.alpha = 0
+        } completion: { [weak self] _ in
+            guard let self = self else { return }
+            superView.sendSubviewToBack(self)
+        }
+    }
 }
