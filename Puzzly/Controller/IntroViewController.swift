@@ -163,11 +163,13 @@ extension IntroViewController {
         let sourceType = UIImagePickerController.SourceType.photoLibrary
         switch status {
         case .notDetermined:
-            PHPhotoLibrary.requestAuthorization {
-                self.checkAuthorizationAccess(granted: $0 == .authorized,
-                                              sourceType: sourceType,
-                                              noPermissionTitle: noPermissionTitle,
-                                              noPermissionMessage: noPermissionMessage)
+            PHPhotoLibrary.requestAuthorization { status in
+                DispatchQueue.main.async {
+                    self.checkAuthorizationAccess(granted: status == .authorized,
+                                                  sourceType: sourceType,
+                                                  noPermissionTitle: noPermissionTitle,
+                                                  noPermissionMessage: noPermissionMessage)
+                }
             }
         case .authorized:
             self.presentImagePicker(sourceType: sourceType)

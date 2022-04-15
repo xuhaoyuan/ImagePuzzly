@@ -2,22 +2,20 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "image2@1x.jpg",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "image2@2x.jpg",
       "scale" : "2x"
     },
     {
+      "filename" : "src=http---img.jj20.com-up-allimg-1113-033120122032-200331122032-2-1200.jpg&refer=http---img.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto.jpg",
       "idiom" : "universal",
-      "filename" : "image2@3x.jpg",
       "scale" : "3x"
     }
   ],
   "info" : {
-    "version" : 1,
-    "author" : "xcode"
+    "author" : "xcode",
+    "version" : 1
   }
 }
