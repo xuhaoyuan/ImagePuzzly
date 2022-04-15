@@ -13,8 +13,6 @@ target 'Puzzly' do
   pod 'XHYCategories'
   pod 'RxKeyboard'
   pod 'UITextView+Placeholder'
-  pod 'JXPhotoBrowser'
-  pod 'ZLPhotoBrowser', '4.1.7'
   pod 'SwiftEntryKit'
   pod 'TextAttributes'
 

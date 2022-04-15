@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>Puzzly</string>
+	<string>简洁拼图</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,8 +20,61 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>weixin</string>
+		<string>wechat</string>
+		<string>weibosdk</string>
+		<string>mqqapi</string>
+		<string>itms-beta</string>
+		<string>mqq</string>
+		<string>taobao</string>
+		<string>weixinULAPI</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
+	<key>NSCameraUsageDescription</key>
+	<string>允许使用相机获取图片</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>允许获取您的地理位置信息便于获取最新消息</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>允许获取您的地理位置信息便于获取最新消息</string>
+	<key>NSLocationUsageDescription</key>
+	<string>允许获取您的地理位置信息便于获取最新消息</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>使用您的位置信息便于获取最新消息</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>请允许使用您的麦克风进行语音识别</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>请允许访问您的相册权限</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>请求访问您的相册</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>请放心点击「允许」，开启权限不会获取你在其他站点的隐私信息，该权限仅用于标识设备并保障服务安全与提升使用体验</string>
+	<key>SKAdNetworkItems</key>
+	<array>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>f7s53z58qe.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>238da6jt44.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>x2jnk7ly8j.skadnetwork</string>
+		</dict>
+		<dict>
+			<key>SKAdNetworkIdentifier</key>
+			<string>22mmun2rn5.skadnetwork</string>
+		</dict>
+	</array>
 	<key>UIAppFonts</key>
 	<array>
 		<string>timeburnerbold.ttf</string>
@@ -45,59 +98,6 @@
 		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>weixin</string>
-		<string>wechat</string>
-		<string>weibosdk</string>
-		<string>mqqapi</string>
-		<string>itms-beta</string>
-		<string>mqq</string>
-		<string>taobao</string>
-		<string>weixinULAPI</string>
-	</array>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>允许获取您的地理位置信息便于获取最新消息</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>允许获取您的地理位置信息便于获取最新消息</string>
-	<key>NSLocationUsageDescription</key>
-	<string>允许获取您的地理位置信息便于获取最新消息</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>使用您的位置信息便于获取最新消息</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>请允许使用您的麦克风进行语音识别</string>
-	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>拼接长图功能需要使用手机相册权限</string>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>请放心点击「允许」，开启权限不会获取你在其他站点的隐私信息，该权限仅用于标识设备并保障服务安全与提升使用体验</string>
-	<key>NSCameraUsageDescription</key>
-	<string>允许使用相机获取您的头像</string>
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>拼接长图功能需要使用手机相册权限</string>
-	<key>SKAdNetworkItems</key>
-	<array>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>f7s53z58qe.skadnetwork</string>
-		</dict>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>238da6jt44.skadnetwork</string>
-		</dict>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>x2jnk7ly8j.skadnetwork</string>
-		</dict>
-		<dict>
-			<key>SKAdNetworkIdentifier</key>
-			<string>22mmun2rn5.skadnetwork</string>
-		</dict>
 	</array>
 </dict>
 </plist>
