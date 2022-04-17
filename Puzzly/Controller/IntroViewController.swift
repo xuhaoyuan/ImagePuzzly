@@ -85,8 +85,7 @@ class IntroViewController: UIViewController {
     }
 
     @objc private func randomButtonTouched() {
-        let random = Int.random(min: 0, max: 4)
-        if let image = UIImage(named: Constant.ImageName.image + "\(random)") {
+        if let image = UIImage(named: Constant.ImageName.getImageStr()) {
             EditViewController.show(from: self, image: image)
         }
     }
