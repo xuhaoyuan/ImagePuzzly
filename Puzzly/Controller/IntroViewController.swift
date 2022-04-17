@@ -204,11 +204,14 @@ extension IntroViewController {
     ///
     /// - Parameter sourceType: Camera or photo library
     func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
-        let imagePickerController = UIImagePickerController()
-        imagePickerController.delegate = self
-        imagePickerController.sourceType = sourceType
-        imagePickerController.modalPresentationStyle = .fullScreen
-        present(imagePickerController, animated: true, completion: nil)
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            let imagePickerController = UIImagePickerController()
+            imagePickerController.delegate = self
+            imagePickerController.sourceType = sourceType
+            imagePickerController.modalPresentationStyle = .fullScreen
+            self.present(imagePickerController, animated: true, completion: nil)
+        }
     }
 
     ///   User can go the Settings from here if wanted
