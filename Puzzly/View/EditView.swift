@@ -140,7 +140,7 @@ class EditView: UIView {
 
             make.centerX.equalToSuperview()
             make.height.equalTo(56)
-            make.bottom.equalTo(startButton.snp.top).offset(-38)
+            make.bottom.equalTo(startButton.snp.top)
         }
     }
 
