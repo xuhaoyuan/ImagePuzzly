@@ -8,69 +8,108 @@
 
 import UIKit
 
-/// Class used to calculate the frame of squares inside a view
-class Position {
-  private var safeArea: UIEdgeInsets
-  private var height: CGFloat
-  private var width: CGFloat
-  private var isLandscape: Bool
-  private var gapLength: CGFloat = 0
-  private var allGaps: CGFloat
-  private var countInRow: CGFloat = 0
-  private var length: CGFloat = 0
-  private var allSquares: CGFloat
-  private var offset: CGFloat
-  private var marginX: CGFloat = 0
-  private var marginY: CGFloat = 0
-  private var numberSquares: Int = 0
-  
-  var margin: CGFloat {
-    return isLandscape ? marginX : marginY
-  }
-  
-  init(parentView: UIView) {
-    safeArea = (parentView.superview?.safeAreaInsets)!
-    height = (parentView.superview?.bounds.height)! - safeArea.top - safeArea.bottom
-    width = (parentView.superview?.bounds.width)! - safeArea.right - safeArea.left
-    isLandscape = width > height
-    countInRow = 4
-    gapLength = 1
-    allGaps = gapLength * (countInRow - 1)
-    length = isLandscape ? (height * 0.9 - allGaps) / countInRow : (width * 0.9 - allGaps) / countInRow
-    allSquares = length * countInRow + allGaps
-    offset = isLandscape ? height * 0.05 : width * 0.05
-    length = ceil(length)
-    marginX = (width - allSquares) / 2
-    marginY = (height - allSquares) / 2
-  }
-  
-  // Get all the squares "frame"
-  func getSquares() -> [CGRect] {
-    return getSquares(borderWidth: 0)
-  }
-  
-  // Calculate all the frame of the squares
-  private func getSquares(borderWidth: CGFloat) -> [CGRect] {
-    var rectangles = [CGRect]()
-    numberSquares = 16
-    var row: CGFloat = 0
-    var column: CGFloat = 0
-    
-    for _ in 0..<numberSquares {
-      let x: CGFloat = marginX + length * column + column * gapLength
-      let y: CGFloat = marginY + length * row + row * gapLength
-      let borderWidth: CGFloat = borderWidth
-      let square = CGRect(origin: .init(x: x - borderWidth , y: y - borderWidth),
-                          size: CGSize(width: length + borderWidth, height: length + borderWidth))
-      rectangles.append(square)
-      
-      if column == countInRow - 1 {
-        column = 0
-        row += 1
-      } else {
-        column += 1
-      }
+enum Squares: CaseIterable {
+    case s2
+    case s3
+    case s4
+    case s5
+    case s6
+    static let gapLength = 1
+    static let leading = 28
+    static let trailing = 28
+
+    var title: String {
+        switch self {
+        case .s2: return "2X2"
+        case .s3: return "3X3"
+        case .s4: return "4X4"
+        case .s5: return "5X5"
+        case .s6: return "6X6"
+        }
     }
-    return rectangles
-  }
+
+    private var rowCount: Int {
+        switch self {
+        case .s2: return 2
+        case .s3: return 3
+        case .s4: return 4
+        case .s5: return 5
+        case .s6: return 6
+        }
+    }
+
+    func getSquares(size: CGSize = UIScreen.main.bounds.size) -> [CGRect] {
+        let height: CGFloat = size.height
+        let width: CGFloat = size.width
+        let countInRow: CGFloat = CGFloat(rowCount)
+        var numberSquares: Int = 0
+        let gapLength: CGFloat = 1
+        let allGaps: CGFloat = gapLength * (countInRow - 1)
+        var length: CGFloat = (width * 0.9 - allGaps) / countInRow
+        let allSquares: CGFloat = length * countInRow + allGaps
+        length = ceil(length)
+        let marginX: CGFloat = (width - allSquares) / 2
+        let marginY: CGFloat = (height - allSquares) / 2
+
+        var rectangles = [CGRect]()
+        numberSquares = rowCount*rowCount
+        var row: CGFloat = 0
+        var column: CGFloat = 0
+
+        for _ in 0..<numberSquares {
+          let x: CGFloat = marginX + length * column + column * gapLength
+          let y: CGFloat = marginY + length * row + row * gapLength
+          let borderWidth: CGFloat = 0
+          let square = CGRect(origin: .init(x: x - borderWidth , y: y - borderWidth),
+                              size: CGSize(width: length + borderWidth, height: length + borderWidth))
+          rectangles.append(square)
+
+          if column == countInRow - 1 {
+            column = 0
+            row += 1
+          } else {
+            column += 1
+          }
+        }
+
+        return rectangles
+    }
+
+    func getPreviewSquares(size: CGSize, line: CGFloat) -> [CGRect] {
+        let height: CGFloat = size.height
+        let width: CGFloat = size.width
+        let countInRow: CGFloat = CGFloat(rowCount)
+        var numberSquares: Int = 0
+        let gapLength: CGFloat = line
+        let allGaps: CGFloat = gapLength * (countInRow - 1)
+        var length: CGFloat = (width - allGaps) / countInRow
+        let allSquares: CGFloat = length * countInRow + allGaps
+        length = ceil(length)
+        let marginX: CGFloat = (width - allSquares) / 2
+        let marginY: CGFloat = (height - allSquares) / 2
+
+        var rectangles = [CGRect]()
+        numberSquares = rowCount*rowCount
+        var row: CGFloat = 0
+        var column: CGFloat = 0
+
+        for _ in 0..<numberSquares {
+          let x: CGFloat = marginX + length * column + column * gapLength
+          let y: CGFloat = marginY + length * row + row * gapLength
+          let borderWidth: CGFloat = 0
+          let square = CGRect(origin: .init(x: x - borderWidth , y: y - borderWidth),
+                              size: CGSize(width: length + borderWidth, height: length + borderWidth))
+          rectangles.append(square)
+
+          if column == countInRow - 1 {
+            column = 0
+            row += 1
+          } else {
+            column += 1
+          }
+        }
+
+        return rectangles
+    }
 }
+

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		37C45BB3B5113C3DD2AF602C /* Pods_Puzzly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9F12C32F3B264A738751002F /* Pods_Puzzly.framework */; };
+		5157E1B7280E9CCF006017B2 /* PreviewImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5157E1B6280E9CCF006017B2 /* PreviewImageView.swift */; };
 		591138BB20F67D8200D55161 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 591138BA20F67D8200D55161 /* Assets.xcassets */; };
 		591ADFC1207D12BF00F5986F /* EditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591ADFC0207D12BF00F5986F /* EditViewController.swift */; };
 		591C96F2207928680023FA29 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 591C96F1207928680023FA29 /* ImageView.swift */; };
@@ -37,6 +38,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5157E1B6280E9CCF006017B2 /* PreviewImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewImageView.swift; sourceTree = "<group>"; };
 		57F4862EB0B4F1E1080723C2 /* Pods-Puzzly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Puzzly.debug.xcconfig"; path = "Target Support Files/Pods-Puzzly/Pods-Puzzly.debug.xcconfig"; sourceTree = "<group>"; };
 		590D991720F11BCC00399256 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		591138BA20F67D8200D55161 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -183,6 +185,7 @@
 			children = (
 				59BD7011205DB1E00061E82C /* AppDelegate.swift */,
 				59BD7013205DB1E00061E82C /* IntroViewController.swift */,
+				5157E1B6280E9CCF006017B2 /* PreviewImageView.swift */,
 				591ADFC0207D12BF00F5986F /* EditViewController.swift */,
 				597FC59220E5778100269861 /* PlayViewController.swift */,
 			);
@@ -342,6 +345,7 @@
 			files = (
 				59B0163C20C6A1A500AABCB0 /* HeaderView.swift in Sources */,
 				591C96F2207928680023FA29 /* ImageView.swift in Sources */,
+				5157E1B7280E9CCF006017B2 /* PreviewImageView.swift in Sources */,
 				59BD7014205DB1E00061E82C /* IntroViewController.swift in Sources */,
 				59609BF6225650D300E83FD5 /* ContainerGridModel.swift in Sources */,
 				591DFBBA20D051310096372A /* Array.swift in Sources */,

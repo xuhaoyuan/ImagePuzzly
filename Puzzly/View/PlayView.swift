@@ -10,7 +10,6 @@ import UIKit
 
 protocol PlayViewDelegate: AnyObject {
     func handlePuzzleViewDrag(_ gestureRecognizer: UIPanGestureRecognizer)
-    func handleShareButtonTapped()
 }
 
 class PlayView: UIView {
@@ -19,18 +18,15 @@ class PlayView: UIView {
 
     lazy var puzzleGridView = PuzzleGridView(images: puzzlePieceViews)
 
-    var headerView = HeaderView()
-
-    var shareButton: UIButton?
+    // var headerView = HeaderView()
 
     var puzzlePieceViews = [UIImageView]()
     var puzzlePieceViewConstraints = [Int: [NSLayoutConstraint]]()
 
-
     required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 
-    init(puzzlePieceViews: [UIImageView]) {
-        self.puzzlePieceViews = puzzlePieceViews
+    init(pieceImages: [UIImage]) {
+        self.puzzlePieceViews = PlayView.makeRandomOrderImageViews(images: pieceImages)
         super.init(frame: .zero)
         addSubviews()
         setupGestureRecognizers()
@@ -42,9 +38,20 @@ class PlayView: UIView {
                 place(item, inside: tile)
             }
         }
-
     }
 
+    private static func makeRandomOrderImageViews(images: [UIImage]) -> [UIImageView] {
+        var array = [UIImageView]()
+        for (index, item) in images.enumerated() {
+            let imageView = UIImageView(image: item)
+            imageView.tag = index
+            array.append(imageView)
+        }
+        array = array.sorted { _,_  in
+            arc4random() < arc4random()
+        }
+        return array
+    }
 
     func place(_ puzzlePieceView: UIImageView, inside tile: TilesView) {
         let id = puzzlePieceView.tag
@@ -80,24 +87,13 @@ class PlayView: UIView {
         self.translatesAutoresizingMaskIntoConstraints = false
         self.backgroundColor = UIColor.clear
 
-        headerView.backgroundColor = UIColor.clear
-
         addSubview(puzzleGridView)
-        addSubview(headerView)
 
         puzzleGridView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.center.equalToSuperview()
             make.height.equalTo(puzzleGridView.snp.width)
         }
-
-        headerView.snp.makeConstraints { make in
-            make.top.equalTo(safeAreaLayoutGuide.snp.top).offset(16)
-            make.leading.equalTo(puzzleGridView)
-            make.trailing.equalTo(puzzleGridView)
-            make.height.equalTo(60)
-        }
-
     }
 
     private func setupGestureRecognizers() {

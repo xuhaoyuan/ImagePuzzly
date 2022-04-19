@@ -27,11 +27,19 @@ class PuzzleGridView: UIView {
     
     private var tiles = [TilesView]()
 
-    required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError()
+    }
+
+    private let tilesPerRow: Int
+    private let tilesPerColumn: Int
 
     init(images: [UIImageView]) {
+        let row = Int(sqrt(Double(images.count)))
+        self.tilesPerRow = row
+        self.tilesPerColumn = row
         super.init(frame: .zero)
-        backgroundColor = UIColor.secondary
+        backgroundColor = UIColor.clear
         initializeAndSetTiles(images: images)
     }
 
@@ -59,8 +67,6 @@ class PuzzleGridView: UIView {
         super.layoutSubviews()
         let boundSize = min(bounds.width, bounds.height)
         let tileMargin: CGFloat = 2
-        let tilesPerRow = 4
-        let tilesPerColumn = 4
 
         let totalMarginPerRow = tileMargin * CGFloat(tilesPerRow) + tileMargin
 
@@ -93,7 +99,7 @@ class PuzzleGridView: UIView {
         for (index, item) in images.enumerated() {
             let tile = TilesView(imageView: item)
             tile.tag = index
-            tile.backgroundColor = UIColor.white
+            tile.backgroundColor = UIColor.clear
             tiles.append(tile)
             addSubview(tile)
         }

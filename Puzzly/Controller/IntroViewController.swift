@@ -14,15 +14,27 @@ import XHYCategories
 
 class IntroViewController: UIViewController {
 
-    private var titleLabel = UILabel(text: "Puzzly", font: UIFont(name: "Didot", size: 80) ?? .systemFont(ofSize: 80, weight: .regular), color: .black, alignment: .center)
 
-    private var randomButton = Button(imageName: Constant.ImageName.random)
-    private var photosButton = Button(imageName: Constant.ImageName.photos)
-    private var cameraButton = Button(imageName: Constant.ImageName.camera)
+    private var randomButton = Button(imageName: "play")
+    private var photosButton = Button(imageName: "photo")
+    private var cameraButton = Button(imageName: "camera")
 
     private lazy var stackView = UIStackView(arrangedSubviews: [randomButton, photosButton, cameraButton])
 
+    private var preImage: UIImage? = {
+        if let data = UserDefaults.standard.data(forKey: "ImageData"),
+           let image = UIImage(data: data) {
+            return image
+        } else {
+            return UIImage(named: "image12")
+        }
+    }()
 
+    private lazy var previewView = PreviewImageView(image: preImage)
+    private let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
+    private lazy var backgroundImage: UIImageView = {
+        return UIImageView(image: preImage)
+    }()
 
     override func viewDidLoad() {
 
@@ -31,23 +43,34 @@ class IntroViewController: UIViewController {
     }
 
     private func makeUI() {
-        view.backgroundColor = UIColor(hexString: "D49888")
+        view.backgroundColor = UIColor.black
 
-        stackView.axis = .vertical
+        stackView.axis = .horizontal
         stackView.alignment = .fill
         stackView.distribution = .fill
         stackView.spacing = 18
 
-        view.addSubview(titleLabel)
-        titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.centerY)
+        view.addSubview(backgroundImage)
+        backgroundImage.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        view.addSubview(blurView)
+        blurView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
+        previewView.backgroundColor = UIColor.white
+        view.addSubview(previewView)
+        previewView.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.width.height.equalTo(view.snp.width).multipliedBy(0.3)
+            make.centerY.equalTo(view.snp.centerY).multipliedBy(0.5)
         }
 
         view.addSubview(stackView)
         stackView.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom)
+            make.centerY.equalToSuperview().multipliedBy(1.5)
             make.centerX.equalToSuperview()
         }
 
@@ -149,13 +172,6 @@ extension IntroViewController {
         }
     }
 
-    /// Ask the user the authorization to use the photo library.
-    /// User can redirect to Settings if authorization not granted.
-    /// Call Image Picker if authorization has already been granted
-    ///
-    /// - Parameters:
-    ///   - status: Authorization status to use PhotoLibrary
-    ///   - noPermissionMessage: Message to display if authorization not granted
     func actionAccordingTo(status: PHAuthorizationStatus ,
                            noPermissionTitle: String?,
                            noPermissionMessage: String?) {
@@ -181,14 +197,6 @@ extension IntroViewController {
         }
     }
 
-    /// Check if user has just granted or denied access to the ressource.
-    /// If granted, call image picker
-    /// If not granted, User can redirect to Settings
-    ///
-    /// - Parameters:
-    ///   - granted: True if authorization has been granted
-    ///   - sourceType: Camera or Photo library
-    ///   - noPermissionMessage: Message to display if authorization not granted
     func checkAuthorizationAccess(granted: Bool,
                                   sourceType: UIImagePickerController.SourceType,
                                   noPermissionTitle: String?,
@@ -200,9 +208,6 @@ extension IntroViewController {
         }
     }
 
-    /// Present image picker
-    ///
-    /// - Parameter sourceType: Camera or photo library
     func presentImagePicker(sourceType: UIImagePickerController.SourceType) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
@@ -214,9 +219,7 @@ extension IntroViewController {
         }
     }
 
-    ///   User can go the Settings from here if wanted
-    ///
-    /// - Parameter message: Description about why user needs to go to Settings
+
     func openSettingsWithUIAlert(title: String?, message: String?) {
         let alertController = UIAlertController (title: title, message: message, preferredStyle: .alert)
 
@@ -237,9 +240,6 @@ extension IntroViewController {
     }
 
 
-    /// Popup an alert message
-    ///
-    /// - Parameter message: Description of the issue
     func troubleAlert(title: String, message: String?) {
         let alertController = UIAlertController(title: title, message: message , preferredStyle: .alert)
         let alertAction = UIAlertAction(title: "Got it", style: .cancel)
@@ -270,20 +270,4 @@ extension IntroViewController: UIImagePickerControllerDelegate, UINavigationCont
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-}
-
-extension UIImagePickerController {
-    override open var supportedInterfaceOrientations : UIInterfaceOrientationMask {
-        return .all
-    }
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromUIImagePickerControllerInfoKeyDictionary(_ input: [UIImagePickerController.InfoKey: Any]) -> [String: Any] {
-    return Dictionary(uniqueKeysWithValues: input.map {key, value in (key.rawValue, value)})
-}
-
-// Helper function inserted by Swift 4.2 migrator.
-fileprivate func convertFromUIImagePickerControllerInfoKey(_ input: UIImagePickerController.InfoKey) -> String {
-    return input.rawValue
 }

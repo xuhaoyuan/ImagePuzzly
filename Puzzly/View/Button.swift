@@ -26,6 +26,6 @@ class Button: UIButton {
         self.layer.masksToBounds = true
         self.isUserInteractionEnabled = true
         self.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
-        self.backgroundColor = UIColor.secondary
+        self.backgroundColor = UIColor.clear
     }
 }

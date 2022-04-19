@@ -11,11 +11,23 @@ import UIKit
 class PlayViewController: UIViewController {
 
     private lazy var playView: PlayView = {
-        let view = PlayView(puzzlePieceViews: makeRandomOrderImageViews())
+        let view = PlayView(pieceImages: clipImages)
         view.delegate = self
-        view.headerView.delegate = self
         return view
     }()
+    private lazy var leftItem: UIBarButtonItem = {
+        var icon = UIBarButtonItem.SystemItem.cancel
+        if #available(iOS 13.0, *) {
+            icon = UIBarButtonItem.SystemItem.close
+        }
+        return UIBarButtonItem(barButtonSystemItem: icon, target: self, action: #selector(quitButtonTouched))
+    }()
+
+    private lazy var rightItem: UIBarButtonItem = {
+        var icon = UIBarButtonItem.SystemItem.pause
+        return UIBarButtonItem(barButtonSystemItem: icon, target: self, action: #selector(preview))
+    }()
+
     private lazy var hintView: HintView = HintView(image: hintImage)
     private let clipImages: [UIImage]
     private let hintImage: UIImage
@@ -25,11 +37,13 @@ class PlayViewController: UIViewController {
 
     private static var numberOftile: Int = 16
     private var score = 0
+    private let square: Squares
 
-    init(originImage: UIImage, hintImage: UIImage, clipImages: [UIImage]) {
+    init(square: Squares, originImage: UIImage, hintImage: UIImage, clipImages: [UIImage]) {
         self.clipImages = clipImages
         self.hintImage = hintImage
         self.originImage = originImage
+        self.square = square
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -39,7 +53,9 @@ class PlayViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.setLeftBarButton(leftItem, animated: false)
+        navigationItem.setRightBarButton(rightItem, animated: false)
+        navigationController?.navigationBar.tintColor = UIColor.black
         view.backgroundColor = UIColor.white
         backgroundImage.contentMode = .scaleAspectFill
         view.addSubview(hintView)
@@ -60,17 +76,12 @@ class PlayViewController: UIViewController {
         }
     }
 
-    private func makeRandomOrderImageViews() -> [UIImageView] {
-        var array = [UIImageView]()
-        for (index, item) in clipImages.enumerated() {
-            let imageView = UIImageView(image: item)
-            imageView.tag = index
-            array.append(imageView)
-        }
-        array = array.sorted { _,_  in
-            arc4random() < arc4random()
-        }
-        return array
+    @objc private func quitButtonTouched() {
+        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+    }
+
+    @objc private func preview() {
+        hintView.appearsTemporarily(for: 2)
     }
 }
 
@@ -137,26 +148,15 @@ extension PlayViewController: PlayViewDelegate {
 
     private func updateScore() {
         score += 1
-        playView.headerView.movesLabel.text = "\(score)"
+        navigationItem.title = "\(score)"
     }
 
     private func presentWinningAlert() {
         let title = score == PlayViewController.numberOftile ? "Perfect Score" : "Congratulation"
-        let message = "Puzzle completed.\nYou cannot move the pieces or see the hint anymore."
+        let message = "Puzzle completed"
         let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
-    }
-}
-
-extension PlayViewController: HeaderViewDelegate {
-
-    func newGameButtonTapped() {
-        self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-    }
-
-    func preview() {
-        hintView.appearsTemporarily(for: 2)
     }
 }

@@ -14,6 +14,13 @@ protocol EditViewDelegate: AnyObject {
 
 class EditView: UIView {
 
+    private lazy var selectedView: UIPickerView = {
+        let pickerView = UIPickerView()
+        pickerView.delegate = self
+        pickerView.dataSource = self
+        return pickerView
+    }()
+
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView(image: image)
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -22,7 +29,7 @@ class EditView: UIView {
     }()
 
     private var clearView: UIVisualEffectView = {
-        let view = UIVisualEffectView(effect: UIBlurEffect(style: .prominent))
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .regular))
         view.translatesAutoresizingMaskIntoConstraints = false
         view.isUserInteractionEnabled = false
         return view
@@ -30,14 +37,13 @@ class EditView: UIView {
     private var startButton: UIButton = {
         let view = UIButton(type: .custom)
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.setTitle("Start", for: .normal)
-        view.setTitleColor(UIColor.white, for: .normal)
-        view.backgroundColor = UIColor.main
-        view.titleLabel?.font = UIFont(name: Constant.Font.Name.timeBurner, size: Constant.Font.Size.startButtonLabel)
+        view.setImage(UIImage(named: "clips"), for: .normal)
         view.layer.cornerRadius = 10
         view.clipsToBounds = true
         return view
     }()
+
+    private(set) var squares: Squares = .s2
 
     private var initialUIImageViewCenter: CGPoint?
 
@@ -84,23 +90,14 @@ class EditView: UIView {
     }
 
     private func setupLayer(view: UIView) {
-        let fadingOutAnimation = {
-            view.alpha = 0.0
-            self.startButton.alpha = 0.0
+        view.alpha = 0.0
+        startButton.alpha = 0.0
+        view.layer.mask = createMaskLayer()
+        let fadingInAnimation = {
+            view.alpha = 1.0
+            self.startButton.alpha = 1.0
         }
-
-        UIView.animate(withDuration: 0.1, animations: fadingOutAnimation) {
-            (done) in
-            if done {
-                view.layer.mask = self.createMaskLayer()
-
-                let fadingInAnimation = {
-                    view.alpha = 1.0
-                    self.startButton.alpha = 1.0
-                }
-                UIView.animate(withDuration: 0.75, animations: fadingInAnimation)
-            }
-        }
+        UIView.animate(withDuration: 0.75, animations: fadingInAnimation)
     }
 
     private func createMaskLayer() -> CAShapeLayer {
@@ -108,7 +105,7 @@ class EditView: UIView {
         let path = CGMutablePath()
         path.addRect(CGRect(origin: .zero, size: superView.bounds.size))
 
-        imagesBound = Position(parentView: self).getSquares()
+        imagesBound = squares.getSquares()
         for square in imagesBound {
             path.addRect(square)
         }
@@ -118,30 +115,6 @@ class EditView: UIView {
         maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
 
         return maskLayer
-    }
-
-    private func calculateOffset(forStartButton: Bool) -> CGFloat {
-        guard let superview = self.superview else { return 0 }
-        let safeArea = (self.superview?.safeAreaInsets)!
-        let height = superview.bounds.height - safeArea.top - safeArea.bottom
-        let width = superview.bounds.width - safeArea.right - safeArea.left
-
-        let short = isLandscapeOrientation ? height : width
-        let long = isLandscapeOrientation ? width : height
-
-        let viewWidth = Constant.Layout.Width.button
-        let viewHeight = Constant.Layout.Height.button
-
-        let viewOffset = isLandscapeOrientation ? viewWidth : viewHeight
-
-        let sizeTile = short * Constant.Layout.SizeRatio.puzzleGrid / CGFloat(Constant.Tiles.Puzzle.countByRow)
-        let allSquareSize = sizeTile * CGFloat(Constant.Tiles.Puzzle.countByRow) + Constant.Tiles.Puzzle.gapLength * 3
-        let maxSquare = forStartButton ? ((long - allSquareSize) / 2) + allSquareSize : ((long - allSquareSize) / 2)
-        let margin = forStartButton ? (long - maxSquare) / 2 - viewOffset / 2 : (maxSquare) / 2 + viewOffset / 2
-
-        let offset = forStartButton ? maxSquare + margin : maxSquare - margin
-
-        return offset
     }
 
     private func setupConstraints() {
@@ -154,12 +127,20 @@ class EditView: UIView {
         clearView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        addSubview(selectedView)
+
         addSubview(startButton)
         startButton.snp.makeConstraints { make in
             make.width.equalTo(Constant.Layout.Width.startButton)
             make.height.equalTo( Constant.Layout.Height.startButton)
             make.centerX.equalToSuperview()
             make.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).offset(-32)
+        }
+        selectedView.snp.makeConstraints { make in
+
+            make.centerX.equalToSuperview()
+            make.height.equalTo(56)
+            make.bottom.equalTo(startButton.snp.top).offset(-38)
         }
     }
 
@@ -231,6 +212,43 @@ class EditView: UIView {
     @objc private func scaleImageView(_ sender: UIPinchGestureRecognizer) {
         imageView.transform = imageView.transform.scaledBy(x: sender.scale, y: sender.scale)
         sender.scale = 1
+    }
+}
+
+extension EditView: UIPickerViewDelegate, UIPickerViewDataSource {
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return Squares.allCases.count
+    }
+
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return Squares.allCases[row].title
+    }
+
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 56
+    }
+
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        self.squares = Squares.allCases[row]
+
+        guard let shaplayer = clearView.layer.mask as? CAShapeLayer else { return }
+        imagesBound = squares.getSquares()
+        let path = CGMutablePath()
+        path.addRect(CGRect(origin: .zero, size: self.bounds.size))
+        for square in imagesBound {
+            path.addRect(square)
+        }
+        let basicAnimation = CABasicAnimation(keyPath: "path")
+        basicAnimation.duration = 0.3
+        basicAnimation.fromValue = shaplayer.path
+        basicAnimation.toValue = path
+        shaplayer.path = path
+        shaplayer.add(basicAnimation, forKey: "path")
+        basicAnimation.isRemovedOnCompletion = true
     }
 }
 

@@ -10,6 +10,10 @@ class EditViewController: UIViewController {
         let navi = UINavigationController(rootViewController: editingViewController)
         navi.modalPresentationStyle = .fullScreen
         from.present(navi, animated: true, completion: nil)
+        DispatchQueue.global().async {
+            let data = image.pngData()
+            UserDefaults.standard.set(data, forKey: "ImageData")
+        }
     }
 
     private lazy var rightItem: UIBarButtonItem = {
@@ -29,7 +33,7 @@ class EditViewController: UIViewController {
     override func viewDidLoad() {
         title = "Clip"
         view.backgroundColor = UIColor.white
-        navigationItem.rightBarButtonItem = rightItem
+        navigationItem.leftBarButtonItem = rightItem
         editView = EditView(image: image)
         editView.delegate = self
         editView.setup(parentView: view)
@@ -56,9 +60,10 @@ extension EditViewController: EditViewDelegate {
     func startButtonTouched() {
         getSnapshots { [weak self] result in
             guard let self = self, let result = result else { return }
-            let playViewController = PlayViewController(originImage: self.image, hintImage: result.1, clipImages: result.0)
-            playViewController.modalPresentationStyle = .fullScreen
-            self.present(playViewController, animated: true)
+            let playViewController = PlayViewController(square: self.editView.squares, originImage: self.image, hintImage: result.1, clipImages: result.0)
+            let navi = UINavigationController(rootViewController: playViewController)
+            navi.modalPresentationStyle = .fullScreen
+            self.present(navi, animated: true)
         }
     }
 
