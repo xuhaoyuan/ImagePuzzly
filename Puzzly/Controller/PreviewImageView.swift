@@ -1,11 +1,3 @@
-//
-//  PreviewImageView.swift
-//  Puzzly
-//
-//  Created by 许浩渊 on 2022/4/19.
-//  Copyright © 2022 Spencer Forrest. All rights reserved.
-//
-
 import UIKit
 
 class PreviewImageView: UIImageView {

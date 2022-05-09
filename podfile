@@ -9,6 +9,8 @@ target 'Puzzly' do
   pod 'RxCocoa'
   pod 'SnapKit'
   pod 'Disk'
+  pod 'MBProgressHUD'
+  pod 'Randient'
   pod 'DeviceKit'
   pod 'XHYCategories'
   pod 'RxKeyboard'

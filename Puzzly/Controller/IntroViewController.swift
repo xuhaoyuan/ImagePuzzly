@@ -1,11 +1,3 @@
-//
-//  IntroViewController.swift
-//  Gridy
-//
-//  Created by Spencer Forrest on 17/03/2018.
-//  Copyright © 2018 Spencer Forrest. All rights reserved.
-//
-
 import UIKit
 import AVFoundation
 import Photos
@@ -22,8 +14,7 @@ class IntroViewController: UIViewController {
     private lazy var stackView = UIStackView(arrangedSubviews: [randomButton, photosButton, cameraButton])
 
     private var preImage: UIImage? = {
-        if let data = UserDefaults.standard.data(forKey: "ImageData"),
-           let image = UIImage(data: data) {
+        if let image = UIImage(named: Constant.ImageName.getImageStr()) {
             return image
         } else {
             return UIImage(named: "image12")
@@ -108,9 +99,12 @@ class IntroViewController: UIViewController {
     }
 
     @objc private func randomButtonTouched() {
-        if let image = UIImage(named: Constant.ImageName.getImageStr()) {
-            EditViewController.show(from: self, image: image)
-        }
+
+        let vc = MyPicLIstViewController()
+        let navi = UINavigationController(rootViewController: vc)
+        navi.modalPresentationStyle = .fullScreen
+        present(navi, animated: true, completion: nil)
+
     }
 
     @objc private func cameraButtonTouched() {

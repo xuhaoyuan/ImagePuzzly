@@ -152,9 +152,9 @@ extension PlayViewController: PlayViewDelegate {
     }
 
     private func presentWinningAlert() {
-        let title = score == PlayViewController.numberOftile ? "Perfect Score" : "Congratulation"
-        let message = "Puzzle completed"
-        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        let title = score == "🎉"
+        let message = "拼图完成！"
+        let action = UIAlertAction(title: "好", style: .default, handler: nil)
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
