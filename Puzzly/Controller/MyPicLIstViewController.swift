@@ -3,6 +3,7 @@ import RxSwift
 import RxCocoa
 import XHYCategories
 import Photos
+import SnapKit
 
 class MyPicLIstViewController: UIViewController {
 
@@ -43,6 +44,7 @@ class MyPicLIstViewController: UIViewController {
         return UIBarButtonItem.init(image: UIImage(named: "homeAdd"), style: UIBarButtonItem.Style.plain, target: self, action: #selector(newButtonTouched))
     }()
 
+    private var deleteBottomOffset: Constraint?
     private lazy var deleteView: UIView = {
         let view = UIView()
         view.backgroundColor = UIColor.red
@@ -52,7 +54,7 @@ class MyPicLIstViewController: UIViewController {
             make.size.equalTo(38)
             make.top.equalToSuperview().offset(8)
             make.centerX.equalToSuperview()
-            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            deleteBottomOffset = make.bottom.equalTo(view.snp.bottom).offset(-16).constraint
         }
         return view
     }()
@@ -79,6 +81,11 @@ class MyPicLIstViewController: UIViewController {
         }.disposed(by: disposeBag)
     }
 
+    override func viewSafeAreaInsetsDidChange() {
+        super.viewSafeAreaInsetsDidChange()
+        deleteBottomOffset?.update(offset: -(16 + view.safeAreaInsets.bottom))
+    }
+
     private func makeUI() {
         view.backgroundColor = UIColor.white
 
@@ -91,15 +98,21 @@ class MyPicLIstViewController: UIViewController {
             make.edges.equalToSuperview()
         }
 
-        blurView.contentView.addSubview(deleteView)
-        deleteView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(view.snp.bottom)
-        }
+//        blurView.contentView.addSubview(deleteView)
+//        deleteView.snp.makeConstraints { make in
+//            make.leading.trailing.equalToSuperview()
+//            make.top.equalTo(view.snp.bottom)
+//        }
 
         blurView.contentView.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+
+        collectionView.addSubview(deleteView)
+        deleteView.snp.makeConstraints { make in
+            make.leading.trailing.equalTo(blurView.contentView)
+            make.top.equalTo(blurView.contentView.snp.bottom)
         }
 
         let longPressGes = UILongPressGestureRecognizer(target: self, action: #selector(handleLongGesture(ges:)))
@@ -120,7 +133,7 @@ class MyPicLIstViewController: UIViewController {
             guard let indexPath = collectionView.indexPathForItem(at: location) else { return }
             moveIndexPath = indexPath
             if let cell = collectionView.cellForItem(at: indexPath) {
-                view.bringSubviewToFront(cell)
+                collectionView.bringSubviewToFront(cell)
             }
             collectionView.beginInteractiveMovementForItem(at: indexPath)
             showDeleteView(true)
@@ -162,14 +175,14 @@ class MyPicLIstViewController: UIViewController {
     private func showDeleteView(_ isShow: Bool) {
         if isShow {
             deleteView.snp.remakeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.bottom.equalTo(view.snp.bottom)
+                make.leading.trailing.equalTo(blurView.contentView)
+                make.bottom.equalTo(blurView.contentView.snp.bottom)
             }
         } else {
             deleteView.transform = CGAffineTransform.identity
             deleteView.snp.remakeConstraints { make in
-                make.leading.trailing.equalToSuperview()
-                make.top.equalTo(view.snp.bottom)
+                make.leading.trailing.equalTo(blurView.contentView)
+                make.top.equalTo(blurView.contentView.snp.bottom)
             }
         }
         UIView.animate(withDuration: 0.3, delay: 0, options: [.beginFromCurrentState, .beginFromCurrentState]) { [weak self] in

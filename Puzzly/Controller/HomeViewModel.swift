@@ -51,13 +51,11 @@ class HomeViewModel: NSObject {
 
     override init() {
         super.init()
-        MBProgressHUD.show()
         DispatchQueue.global().async { [weak self] in
             guard let self = self else { return }
             if let result = try? Disk.retrieve(Self.path, from: .documents, as: [Canvas].self), result.count > 0 {
                 DispatchQueue.main.async { [weak self] in
                     self?.relay.accept(result)
-                    MBProgressHUD.hide()
                 }
             } else {
                 var canvasList: [Canvas] = []
@@ -69,7 +67,6 @@ class HomeViewModel: NSObject {
                 DispatchQueue.main.async { [weak self] in
                     self?.relay.accept(canvasList)
                     self?.saveData()
-                    MBProgressHUD.hide()
                 }
             }
         }
