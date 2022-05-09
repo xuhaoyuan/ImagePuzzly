@@ -1,11 +1,3 @@
-//
-//  PlayViewController.swift
-//  Gridy
-//
-//  Created by Spencer Forrest on 05/04/2018.
-//  Copyright © 2018 Spencer Forrest. All rights reserved.
-//
-
 import UIKit
 
 class PlayViewController: UIViewController {
@@ -24,8 +16,7 @@ class PlayViewController: UIViewController {
     }()
 
     private lazy var rightItem: UIBarButtonItem = {
-        var icon = UIBarButtonItem.SystemItem.pause
-        return UIBarButtonItem(barButtonSystemItem: icon, target: self, action: #selector(preview))
+        return UIBarButtonItem(image: UIImage(named: "see"), style: .plain, target: self, action: #selector(preview))
     }()
 
     private lazy var hintView: HintView = HintView(image: hintImage)

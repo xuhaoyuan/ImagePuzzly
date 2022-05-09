@@ -8,24 +8,25 @@
 
 import UIKit
 
-class Button: UIButton {
+class Button: UIControl {
 
-    private var heightConstraint: NSLayoutConstraint!
-    private var widthConstraint: NSLayoutConstraint!
+    private let imageView = UIImageView()
+    private let label = UILabel()
 
     required init?(coder aDecoder: NSCoder) { super.init(coder: aDecoder) }
 
-    init(imageName: String, forIpad: Bool = false) {
+    init(imageName: String, name: String) {
         super.init(frame: .zero)
-
-        let image = UIImage.init(named: imageName)
-        self.setImage(image, for: .normal)
-        self.imageView?.contentMode = .scaleAspectFit
-        self.translatesAutoresizingMaskIntoConstraints = false
-        self.layer.cornerRadius = Constant.Layout.cornerRadius.introButton
-        self.layer.masksToBounds = true
-        self.isUserInteractionEnabled = true
-        self.contentEdgeInsets = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
-        self.backgroundColor = UIColor.clear
+        imageView.image = UIImage(named: imageName)
+        label.text = name
+        label.textColor = UIColor.white
+        label.font = UIFont.systemFont(ofSize: 15, weight: .bold)
+        backgroundColor = UIColor.clear
+        let stackView = UIStackView(subviews: [imageView, label], axis: .vertical, alignment: .center, distribution: .fillProportionally, spacing: 6)
+        addSubview(stackView)
+        stackView.isUserInteractionEnabled = false
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
 }

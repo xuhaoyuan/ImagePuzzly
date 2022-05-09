@@ -7,9 +7,9 @@ import XHYCategories
 class IntroViewController: UIViewController {
 
 
-    private var randomButton = Button(imageName: "play")
-    private var photosButton = Button(imageName: "photo")
-    private var cameraButton = Button(imageName: "camera")
+    private var randomButton = Button(imageName: "play", name: "我的")
+    private var photosButton = Button(imageName: "photo", name: "相册")
+    private var cameraButton = Button(imageName: "camera", name: "相机")
 
     private lazy var stackView = UIStackView(arrangedSubviews: [randomButton, photosButton, cameraButton])
 
@@ -38,7 +38,7 @@ class IntroViewController: UIViewController {
 
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillEqually
         stackView.spacing = 18
 
         view.addSubview(backgroundImage)
@@ -63,6 +63,8 @@ class IntroViewController: UIViewController {
         stackView.snp.makeConstraints { make in
             make.centerY.equalToSuperview().multipliedBy(1.5)
             make.centerX.equalToSuperview()
+            make.leading.equalToSuperview().offset(18)
+            make.trailing.equalToSuperview().offset(-18)
         }
 
         randomButton.alpha = 0
