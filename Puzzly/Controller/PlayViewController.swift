@@ -152,7 +152,7 @@ extension PlayViewController: PlayViewDelegate {
     }
 
     private func presentWinningAlert() {
-        let title = score == "🎉"
+        let title = "🎉"
         let message = "拼图完成！"
         let action = UIAlertAction(title: "好", style: .default, handler: nil)
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
