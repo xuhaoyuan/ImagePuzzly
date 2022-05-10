@@ -17,6 +17,9 @@ target 'Puzzly' do
   pod 'UITextView+Placeholder'
   pod 'SwiftEntryKit'
   pod 'TextAttributes'
+  pod 'lottie-ios'
+  pod 'Kingfisher'
+  pod 'SideMenu'
 
 end
 
